@@ -1,13 +1,11 @@
 package org.jsoup;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
 import org.jsoup.helper.DataUtil;
 import org.jsoup.helper.HttpConnection;
-import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +16,7 @@ import java.net.URL;
  The core public access point to the jsoup functionality.
 
  @author Jonathan Hedley */
-public final class Jsoup {
+public class Jsoup {
     private Jsoup() {}
 
     /**
@@ -240,46 +238,16 @@ public final class Jsoup {
     }
 
     /**
-     * Test if the input body HTML has only tags and attributes allowed by the Whitelist. Useful for form validation.
-     * <p>The input HTML should still be run through the cleaner to set up enforced attributes, and to tidy the output.
-     * <p>Assumes the HTML is a body fragment (i.e. will be used in an existing HTML document body.)
-     * @param bodyHtml HTML to test
-     * @param whitelist whitelist to test against
-     * @return true if no tags or attributes were removed; false otherwise
-     * @see #clean(String, org.jsoup.safety.Whitelist)
+     Test if the input body HTML has only tags and attributes allowed by the Whitelist. Useful for form validation.
+     <p>The input HTML should still be run through the cleaner to set up enforced attributes, and to tidy the output.
+     <p>Assumes the HTML is a body fragment (i.e. will be used in an existing HTML document body.)
+     @param bodyHtml HTML to test
+     @param whitelist whitelist to test against
+     @return true if no tags or attributes were removed; false otherwise
+     @see #clean(String, org.jsoup.safety.Whitelist) 
      */
     public static boolean isValid(String bodyHtml, Whitelist whitelist) {
         return new Cleaner(whitelist).isValidBodyHtml(bodyHtml);
-    }
-    /**
-     * Test if the input body HTML has only tags and attributes allowed by the Whitelist. Useful for form validation.
-     * <p>The input HTML should still be run through the cleaner to set up enforced attributes, and to tidy the output.
-     * <p>Assumes the HTML is a body fragment (i.e. will be used in an existing HTML document body.)
-     * @param bodyHtml HTML to test
-     * @param whitelist whitelist to test against
-     * @param baseUri The URL where the HTML was retrieved from. Used to resolve relative URLs to absolute URLs, that occur
-     * before the HTML declares a {@code <base href>} tag.
-     * @return true if no tags or attributes were removed; false otherwise
-     * @see #clean(String, org.jsoup.safety.Whitelist)
-     */
-
-    public static boolean isValid(String bodyHtml, String baseUri,Whitelist whitelist) {
-        StringBuilder body = new StringBuilder();
-        Document doc = Jsoup.parse(bodyHtml,baseUri);
-        Elements links = doc.getElementsByTag("a");
-
-        if(links != null && !links.isEmpty()){
-            int flag = 0;
-            for (Element link : links){
-                if(flag ==1){
-                    body.append("\n");
-                }
-                flag=1;
-                link.attr("href",link.absUrl("href"));
-                body.append(link.toString());
-            }
-        }
-        return new Cleaner(whitelist).isValidBodyHtml(body.toString());
     }
     
 }

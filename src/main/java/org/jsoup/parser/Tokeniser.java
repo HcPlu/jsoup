@@ -59,16 +59,19 @@ final class Tokeniser {
 
         // if emit is pending, a non-character token was found: return any chars in buffer, and leave token for next read:
         final StringBuilder cb = this.charsBuilder;
+//        System.out.println(cb.toString());
         if (cb.length() != 0) {
             String str = cb.toString();
             cb.delete(0, cb.length());
             charsString = null;
             return charPending.data(str);
         } else if (charsString != null) {
+//            System.out.printf("charPending.data(%s), ", charsString);
             Token token = charPending.data(charsString);
             charsString = null;
             return token;
         } else {
+//            System.out.print("emitPending, ");
             isEmitPending = false;
             return emitPending;
         }

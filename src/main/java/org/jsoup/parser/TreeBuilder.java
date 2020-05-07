@@ -65,7 +65,6 @@ abstract class TreeBuilder {
             Token token = tokeniser.read();
             process(token);
             token.reset();
-
             if (token.type == eof)
                 break;
         }

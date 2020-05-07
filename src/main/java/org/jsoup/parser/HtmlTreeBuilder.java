@@ -108,7 +108,6 @@ public class HtmlTreeBuilder extends TreeBuilder {
 
             root = new Element(Tag.valueOf("html", settings), baseUri);
             doc.appendChild(root);
-
             stack.add(root);
             resetInsertionMode();
 
@@ -213,7 +212,6 @@ public class HtmlTreeBuilder extends TreeBuilder {
             tokeniser.emit(emptyEnd.reset().name(el.tagName()));  // ensure we get out of whatever state we are in. emitted for yielded processing
             return el;
         }
-
         Element el = new Element(Tag.valueOf(startTag.name(), settings), null, settings.normalizeAttributes(startTag.attributes));
         insert(el);
         return el;
@@ -255,8 +253,13 @@ public class HtmlTreeBuilder extends TreeBuilder {
         return el;
     }
 
+    /**
+     * From a comment build a downlevel revealed Comment node and inset it to stack.
+     * @param commentToken The corresponding
+     */
     void insert(Token.Comment commentToken) {
         Comment comment = new Comment(commentToken.getData());
+        comment.setDownLevelRevealed(commentToken.isDownLevelRevealed);
         insertNode(comment);
     }
 
